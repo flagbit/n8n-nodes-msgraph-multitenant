@@ -13,7 +13,7 @@
   ],
   "license": "MIT",
   "homepage": "https://stream8.nl",
-  "author": "ikbendion <info@ikbendion.nl>",
+  "author": "dblonk <info@ikbendion.nl>",
   "repository": {
     "type": "git",
     "url": "https://github.com/ikbendion/n8n-nodes-msgraph-multitenant"
