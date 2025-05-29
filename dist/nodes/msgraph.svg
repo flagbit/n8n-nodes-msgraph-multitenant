@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0078d4" />
+      <stop offset="100%" stop-color="#32d4f5" />
+    </linearGradient>
+  </defs>
+
+  <!-- Four rounded squares with gaps -->
+  <rect x="10" y="10" width="85" height="85" rx="12" fill="url(#grad)" />
+  <rect x="105" y="10" width="85" height="85" rx="12" fill="url(#grad)" />
+  <rect x="10" y="105" width="85" height="85" rx="12" fill="url(#grad)" />
+  <rect x="105" y="105" width="85" height="85" rx="12" fill="url(#grad)" />
+
+  <!-- Centered "MT" text -->
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle"
+        font-family="Segoe UI, sans-serif" font-size="70" font-weight="bold" fill="#ffffff">
+    MT
+  </text>
+</svg>
