@@ -1,6 +1,6 @@
 {
   "name": "n8n-nodes-msgraph-multitenant",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "n8n node for consuming Microsoft Graph API, with mutlitenant capabilities",
   "keywords": [
     "n8n-community-node-package",
