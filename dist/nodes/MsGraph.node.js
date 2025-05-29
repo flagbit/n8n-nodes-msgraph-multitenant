@@ -1,6 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.MsGraph = void 0;
+import { workflowHelpers } from 'n8n-workflow';
 
 const { NodeOperationError } = require("n8n-workflow");
 
@@ -103,7 +104,7 @@ class MsGraph {
           } catch (error) {
             if (error.statusCode === 429 && throttle.enabled && retryCount < throttle.maxRetries) {
               retryCount++;
-              await new Promise(r => setTimeout(r, throttle.delay * 1000));
+              await workflowHelpers.wait(this.getWorkflowStaticData('global'), throttle.delay * 1000);
               continue;
             }
             throw error;
