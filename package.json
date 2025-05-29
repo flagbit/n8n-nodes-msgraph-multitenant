@@ -1,6 +1,7 @@
 {
   "name": "n8n-nodes-msgraph-multitenant",
-  "version": "0.1.2",
+  "version": "0.1.7",
+  "type": "commonjs",
   "description": "n8n node for consuming Microsoft Graph API, with mutlitenant capabilities",
   "keywords": [
     "n8n-community-node-package",
@@ -19,7 +20,6 @@
     "url": "https://github.com/ikbendion/n8n-nodes-msgraph-multitenant"
   },
   "main": "index.js",
-  "type": "commonjs",
   "scripts": {
     "build": "tsc",
     "dev": "tsc --watch"
