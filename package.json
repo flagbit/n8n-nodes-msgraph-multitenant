@@ -1,5 +1,5 @@
 {
-  "name": "@ikbendion/n8n-nodes-msgraph-mt",
+  "name": "n8n-nodes-msgraph-multitenant",
   "version": "0.1.0",
   "description": "n8n node for consuming Microsoft Graph API, with mutlitenant capabilities",
   "keywords": [
@@ -12,14 +12,11 @@
     "mt"
   ],
   "license": "MIT",
-  "homepage": "https://n8n.io",
-  "author": {
-    "name": "ikbendion",
-    "email": "info@ikbendion.nl"
-  },
+  "homepage": "https://stream8.nl",
+  "author": "ikbendion <info@ikbendion.nl>",
   "repository": {
     "type": "git",
-    "url": "https://stream8.nl"
+    "url": "https://github.com/ikbendion/n8n-nodes-msgraph-multitenant"
   },
   "main": "index.js",
   "type": "commonjs",
