@@ -485,6 +485,29 @@ while (true) {
 3. **Batch Processing**: Process multiple items in single workflow execution
 4. **Query Optimization**: Use `$select` to limit returned fields
 5. **Pagination**: Handle large datasets with `$top` and `$skip`
+6. **JSON Response Handling**: Responses are always parsed as JSON for optimal performance
+
+## Response Handling
+
+### JSON-First Approach
+Since Microsoft Graph API always returns JSON responses, the node automatically parses all responses as JSON objects. This ensures:
+
+- **Consistent Data Types**: Always receive properly typed JavaScript objects
+- **Reliable Parsing**: No manual JSON parsing required
+- **Error Prevention**: Eliminates JSON parsing errors
+- **Performance**: Optimized request handling
+
+### Response Format Options
+- **JSON Format**: Returns the parsed JavaScript object directly
+- **String Format**: Returns the JSON response converted to a string representation
+- Both formats work with the same underlying parsed JSON data
+
+### Rate Limit Handling
+The node automatically handles Microsoft Graph API rate limits:
+- **429 Status Code Detection**: Automatic retry on rate limit responses  
+- **Retry-After Header**: Respects server-specified retry delays
+- **Exponential Backoff**: Progressive delay increase for consecutive failures
+- **Max Retries**: Configurable maximum retry attempts (default: 5)
 
 ---
 

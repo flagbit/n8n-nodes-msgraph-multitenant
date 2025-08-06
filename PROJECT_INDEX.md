@@ -28,7 +28,7 @@
 
 ### Package Information
 - **Name**: @flagbit/n8n-nodes-msgraph
-- **Version**: 0.1.9
+- **Version**: 0.1.10
 - **License**: MIT
 - **Author**: Jörg Weller <joerg.weller@flagbit.de>
 - **Repository**: [GitHub](https://github.com/flagbit/n8n-nodes-msgraph-multitenant)

@@ -136,16 +136,14 @@ class MsGraph {
 
         const responseFormat = this.getNodeParameter('responseFormat', i, 'json');
         
-        // Determine if request should be JSON based on body content type
-        const isJsonRequest = bodyContentType === 'json';
-        
+        // Microsoft Graph API always returns JSON responses, so always parse as JSON
         const requestOptions = { 
           method, 
           url, 
           headers, 
           qs, 
           body,
-          json: isJsonRequest && responseFormat === 'json',
+          json: true, // Always parse as JSON since Microsoft Graph API always returns JSON
           resolveWithFullResponse: true 
         };
 
@@ -161,6 +159,7 @@ class MsGraph {
           } catch (error) {
             if (error.statusCode === 429 && throttle.enabled && retryCount < throttle.maxRetries) {
               retryCount++;
+              const retryAfter = error.headers?.['retry-after'] || throttle.delay;
               await new Promise(resolve => setTimeout(resolve, retryAfter * 1000));
               continue;
             }

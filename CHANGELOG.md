@@ -4,6 +4,22 @@
 This package has been renamed from `n8n-nodes-msgraph-multitenant` to `@flagbit/n8n-nodes-msgraph`.
 Author: Jörg Weller <joerg.weller@flagbit.de>
 
+## [0.1.10] - 2025-01-09
+
+### Fixed
+- **Improved JSON Response Handling**: Always parse responses as JSON since Microsoft Graph API always returns JSON
+  - Changed request options to always use `json: true` regardless of responseFormat setting
+  - Ensures consistent JSON parsing for all Graph API responses
+  - String responseFormat still works by converting parsed JSON to string
+- **Fixed Rate Limit Retry Logic**: Properly handle `retry-after` header in 429 responses
+  - Read retry delay from response headers or use fallback value
+  - Prevents undefined variable errors during rate limit handling
+
+### Technical Details
+- Microsoft Graph API always returns JSON responses, so the node now always parses them as JSON
+- ResponseFormat setting still controls output format (JSON object vs string representation)
+- Improved error handling for rate limiting scenarios
+
 ## [0.1.9] - 2025-01-09
 
 ### Added
