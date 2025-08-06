@@ -1,4 +1,4 @@
-# Multi-Tenant Microsoft Graph Node for N8N
+# @flagbit/n8n-nodes-msgraph - Multi-Tenant Microsoft Graph Node for N8N
 
 This repository provides a custom N8N node for interacting with the Microsoft Graph API across **multiple tenants**, based on a fork of [`advenimuss-n8n-nodes-msgraph`](https://github.com/advenimus/n8n-nodes-msgraph). It extends the original node by allowing dynamic data retrieval from **many Microsoft tenants** using a **multi-tenant Azure app registration**.
 
@@ -38,7 +38,8 @@ To configure your Azure AD app for multi-tenant access:
    - Dynamically using expressions or looping over a list of tenant IDs.
    - Or statically by hardcoding a single tenant ID if only one is required.
 5. **Configure the desired action** (e.g., list users, get groups, send email).
-6. **Execute the workflow** to fetch data from the Microsoft Graph API.
+6. **Optionally add custom headers** for advanced API scenarios (e.g., API version, consistency level, preferences).
+7. **Execute the workflow** to fetch data from the Microsoft Graph API.
 
 ## 📄 License
 

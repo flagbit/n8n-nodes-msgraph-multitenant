@@ -24,6 +24,7 @@ class MsGraph {
         { displayName: 'Query Parameters', name: 'queryParameters', type: 'fixedCollection', placeholder: 'Add Parameter', typeOptions: { multipleValues: true }, options: [{ name: 'parameter', displayName: 'Parameter', values: [ { displayName: 'Name', name: 'name', type: 'string', default: '' }, { displayName: 'Value', name: 'value', type: 'string', default: '' } ] }], default: {} },
         { displayName: 'Body', name: 'body', type: 'json', displayOptions: { show: { method: ['POST','PATCH','PUT'] } }, default: '', description: 'JSON body' },
         { displayName: 'Response Format', name: 'responseFormat', type: 'options', options: [ { name: 'JSON', value: 'json' }, { name: 'String', value: 'string' } ], default: 'json' },
+        { displayName: 'Custom Headers', name: 'customHeaders', type: 'fixedCollection', placeholder: 'Add Header', typeOptions: { multipleValues: true }, description: 'Custom headers to send with the request', options: [{ name: 'header', displayName: 'Header', values: [ { displayName: 'Name', name: 'name', type: 'string', default: '', description: 'Header name (e.g., x-custom-header)' }, { displayName: 'Value', name: 'value', type: 'string', default: '', description: 'Header value' } ] }], default: {} },
       ],
     };
   }
@@ -84,8 +85,20 @@ class MsGraph {
           }
         }
 
+        // Build headers with defaults
         const headers = { Authorization: `Bearer ${accessToken}`, Accept: 'application/json' };
         if (body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
+
+        // Add custom headers
+        const customHeaders = this.getNodeParameter('customHeaders.header', i, []);
+        customHeaders.forEach(header => {
+          if (header.name && header.value) {
+            // Prevent overriding Authorization header for security
+            if (header.name.toLowerCase() !== 'authorization') {
+              headers[header.name] = header.value;
+            }
+          }
+        });
 
         const responseFormat = this.getNodeParameter('responseFormat', i, 'json');
         const requestOptions = { method, url, headers, qs, body, json: responseFormat === 'json', resolveWithFullResponse: true };
