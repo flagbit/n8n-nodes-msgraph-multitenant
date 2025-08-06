@@ -1,6 +1,6 @@
 {
   "name": "@flagbit/n8n-nodes-msgraph",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "type": "commonjs",
   "description": "n8n node for consuming Microsoft Graph API, with mutlitenant capabilities",
   "keywords": [

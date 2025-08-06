@@ -24,10 +24,11 @@
 - ⏱️ **Rate limit handling** - Automatic retry with exponential backoff
 - 📊 **Flexible responses** - JSON or string format
 - 📋 **Custom headers** - Support for additional HTTP headers in requests
+- 📝 **Multiple body formats** - JSON, plain text, and form data support
 
 ### Package Information
 - **Name**: @flagbit/n8n-nodes-msgraph
-- **Version**: 0.1.8
+- **Version**: 0.1.9
 - **License**: MIT
 - **Author**: Jörg Weller <joerg.weller@flagbit.de>
 - **Repository**: [GitHub](https://github.com/flagbit/n8n-nodes-msgraph-multitenant)

@@ -22,7 +22,10 @@ class MsGraph {
         { displayName: 'HTTP Method', name: 'method', type: 'options', options: ['GET','POST','PATCH','PUT','DELETE'].map(m => ({ name: m, value: m })), default: 'GET' },
         { displayName: 'URL', name: 'url', type: 'string', default: 'https://graph.microsoft.com/v1.0/me', placeholder: 'https://graph.microsoft.com/v1.0/users', description: 'Full Graph URL', required: true },
         { displayName: 'Query Parameters', name: 'queryParameters', type: 'fixedCollection', placeholder: 'Add Parameter', typeOptions: { multipleValues: true }, options: [{ name: 'parameter', displayName: 'Parameter', values: [ { displayName: 'Name', name: 'name', type: 'string', default: '' }, { displayName: 'Value', name: 'value', type: 'string', default: '' } ] }], default: {} },
-        { displayName: 'Body', name: 'body', type: 'json', displayOptions: { show: { method: ['POST','PATCH','PUT'] } }, default: '', description: 'JSON body' },
+        { displayName: 'Body Content Type', name: 'bodyContentType', type: 'options', displayOptions: { show: { method: ['POST','PATCH','PUT'] } }, options: [ { name: 'JSON', value: 'json', description: 'Send body as JSON' }, { name: 'Text', value: 'text', description: 'Send body as plain text' }, { name: 'Form Data', value: 'form', description: 'Send body as form data' } ], default: 'json', description: 'Content type of the request body' },
+        { displayName: 'Body', name: 'body', type: 'json', displayOptions: { show: { method: ['POST','PATCH','PUT'], bodyContentType: ['json'] } }, default: '', description: 'JSON body data' },
+        { displayName: 'Body', name: 'bodyText', type: 'string', displayOptions: { show: { method: ['POST','PATCH','PUT'], bodyContentType: ['text'] } }, default: '', description: 'Text body data', typeOptions: { rows: 5 } },
+        { displayName: 'Body', name: 'bodyForm', type: 'fixedCollection', placeholder: 'Add Field', displayOptions: { show: { method: ['POST','PATCH','PUT'], bodyContentType: ['form'] } }, typeOptions: { multipleValues: true }, options: [{ name: 'parameter', displayName: 'Parameter', values: [ { displayName: 'Name', name: 'name', type: 'string', default: '' }, { displayName: 'Value', name: 'value', type: 'string', default: '' } ] }], default: {} },
         { displayName: 'Response Format', name: 'responseFormat', type: 'options', options: [ { name: 'JSON', value: 'json' }, { name: 'String', value: 'string' } ], default: 'json' },
         { displayName: 'Custom Headers', name: 'customHeaders', type: 'fixedCollection', placeholder: 'Add Header', typeOptions: { multipleValues: true }, description: 'Custom headers to send with the request', options: [{ name: 'header', displayName: 'Header', values: [ { displayName: 'Name', name: 'name', type: 'string', default: '', description: 'Header name (e.g., x-custom-header)' }, { displayName: 'Value', name: 'value', type: 'string', default: '', description: 'Header value' } ] }], default: {} },
       ],
@@ -76,18 +79,49 @@ class MsGraph {
         const qs = qsParams.reduce((obj, p) => { obj[p.name] = p.value; return obj; }, {});
 
         let body;
+        let contentType = 'application/json'; // default
+        let bodyContentType = 'json'; // default
+        
         if (['POST','PATCH','PUT'].includes(method)) {
-          body = this.getNodeParameter('body', i, {});
-          if (typeof body === 'string' && body.trim()) {
-            try { body = JSON.parse(body); } catch {
-              throw new NodeOperationError(this.getNode(), 'Body must be valid JSON');
-            }
+          bodyContentType = this.getNodeParameter('bodyContentType', i, 'json');
+          
+          switch (bodyContentType) {
+            case 'json':
+              body = this.getNodeParameter('body', i, '');
+              if (typeof body === 'string' && body.trim()) {
+                try { 
+                  body = JSON.parse(body); 
+                } catch {
+                  throw new NodeOperationError(this.getNode(), 'Body must be valid JSON');
+                }
+              }
+              contentType = 'application/json';
+              break;
+              
+            case 'text':
+              body = this.getNodeParameter('bodyText', i, '');
+              contentType = 'text/plain';
+              break;
+              
+            case 'form':
+              const formParams = this.getNodeParameter('bodyForm.parameter', i, []);
+              const formData = new URLSearchParams();
+              formParams.forEach(param => {
+                if (param.name) {
+                  formData.append(param.name, param.value || '');
+                }
+              });
+              body = formData.toString();
+              contentType = 'application/x-www-form-urlencoded';
+              break;
           }
         }
 
         // Build headers with defaults
         const headers = { Authorization: `Bearer ${accessToken}`, Accept: 'application/json' };
-        if (body && !headers['Content-Type']) headers['Content-Type'] = 'application/json';
+        if (body !== undefined && body !== null && body !== '') {
+          headers['Content-Type'] = contentType;
+        }
 
         // Add custom headers
         const customHeaders = this.getNodeParameter('customHeaders.header', i, []);
@@ -101,7 +135,19 @@ class MsGraph {
         });
 
         const responseFormat = this.getNodeParameter('responseFormat', i, 'json');
-        const requestOptions = { method, url, headers, qs, body, json: responseFormat === 'json', resolveWithFullResponse: true };
+        
+        // Determine if request should be JSON based on body content type
+        const isJsonRequest = bodyContentType === 'json';
+        
+        const requestOptions = { 
+          method, 
+          url, 
+          headers, 
+          qs, 
+          body,
+          json: isJsonRequest && responseFormat === 'json',
+          resolveWithFullResponse: true 
+        };
 
         // Throttle retry
         const throttle = { enabled: true, delay: 2, maxRetries: 5 };

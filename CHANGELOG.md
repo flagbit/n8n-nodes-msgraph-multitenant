@@ -4,6 +4,24 @@
 This package has been renamed from `n8n-nodes-msgraph-multitenant` to `@flagbit/n8n-nodes-msgraph`.
 Author: Jörg Weller <joerg.weller@flagbit.de>
 
+## [0.1.9] - 2025-01-09
+
+### Added
+- **Multiple Body Content Types**: Support for different request body formats
+  - JSON (default): Send structured JSON data
+  - Text: Send plain text content
+  - Form Data: Send URL-encoded form data
+  - Dynamic Content-Type header based on selected body type
+
+### Fixed
+- Removed restriction that body must always be valid JSON
+- Proper Content-Type header setting for non-JSON requests
+
+### Technical Details
+- Added `bodyContentType` option to select between json, text, and form
+- Separate input fields for each body type with appropriate UI
+- Automatic Content-Type header: application/json, text/plain, or application/x-www-form-urlencoded
+
 ## [0.1.8] - 2025-01-09
 
 ### Added

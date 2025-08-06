@@ -81,11 +81,42 @@ Node metadata and configuration schema.
   }
   ```
 
+##### bodyContentType
+- **Type**: `options`
+- **Default**: `json`
+- **Display**: Only for POST, PATCH, PUT methods
+- **Options**:
+  - `json` - Send body as JSON
+  - `text` - Send body as plain text
+  - `form` - Send body as URL-encoded form data
+- **Description**: Determines the format and Content-Type of the request body
+
 ##### body
 - **Type**: `json`
-- **Display**: Only for POST, PATCH, PUT methods
-- **Description**: Request body in JSON format
+- **Display**: Only for POST, PATCH, PUT methods when bodyContentType is `json`
+- **Description**: JSON body data
 - **Validation**: Must be valid JSON string or object
+
+##### bodyText
+- **Type**: `string`
+- **Display**: Only for POST, PATCH, PUT methods when bodyContentType is `text`
+- **Description**: Plain text body data
+- **UI**: Multi-line text area with 5 rows
+
+##### bodyForm
+- **Type**: `fixedCollection`
+- **Display**: Only for POST, PATCH, PUT methods when bodyContentType is `form`
+- **Description**: Form data as key-value pairs
+- **Structure**: Array of name-value pairs
+- **Example**:
+  ```json
+  {
+    "parameter": [
+      { "name": "username", "value": "john.doe" },
+      { "name": "email", "value": "john@example.com" }
+    ]
+  }
+  ```
 
 ##### responseFormat
 - **Type**: `options`
@@ -401,6 +432,47 @@ while (true) {
         ]
     },
     responseFormat: "json"
+}
+```
+
+### Example 6: Different Body Content Types
+
+```javascript
+// JSON Body (default)
+{
+    tenantId: "specific-tenant-guid",
+    method: "POST",
+    url: "https://graph.microsoft.com/v1.0/users",
+    bodyContentType: "json",
+    body: JSON.stringify({
+        displayName: "John Doe",
+        mailNickname: "johndoe",
+        userPrincipalName: "john@example.com"
+    })
+}
+
+// Plain Text Body
+{
+    tenantId: "specific-tenant-guid",
+    method: "POST",
+    url: "https://graph.microsoft.com/v1.0/me/sendMail",
+    bodyContentType: "text",
+    bodyText: "This is a plain text message body"
+}
+
+// Form Data Body
+{
+    tenantId: "specific-tenant-guid",
+    method: "POST",
+    url: "https://graph.microsoft.com/v1.0/oauth2/token",
+    bodyContentType: "form",
+    bodyForm: {
+        parameter: [
+            { name: "grant_type", value: "client_credentials" },
+            { name: "client_id", value: "your-client-id" },
+            { name: "scope", value: "https://graph.microsoft.com/.default" }
+        ]
+    }
 }
 ```
 
