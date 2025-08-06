@@ -11,6 +11,13 @@ This is an n8n community node package that provides Microsoft Graph API access w
 - `npm run build` - Compile TypeScript to JavaScript (runs `tsc`)
 - `npm run dev` - Watch mode for development (runs `tsc --watch`)
 
+## Custom Commands
+
+- `/publish [version-type] [--otp=XXXXXX]` - Automated git commit, push, and npm publish
+  - Supports version bumping: patch, minor, major
+  - Includes safety checks and OTP support for 2FA
+  - Example: `/publish patch --otp=123456`
+
 Note: This repository contains only compiled JavaScript files in `/dist`. There are no TypeScript source files (.ts) in version control - only the compiled output and type declarations.
 
 ## Architecture
